@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PrimeNG } from 'primeng/config';
@@ -7,12 +7,12 @@ import { PrimeNG } from 'primeng/config';
   selector: 'app-root',
   imports: [RouterOutlet, ButtonModule],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styleUrl: './app.scss'
 })
 export class App implements OnInit {
-  protected title = 'stock-control';
+  private readonly primeng = inject(PrimeNG);
 
-  constructor(private primeng: PrimeNG) {}
+  protected title = 'stock-control';
 
   ngOnInit() {
     this.primeng.ripple.set(true);

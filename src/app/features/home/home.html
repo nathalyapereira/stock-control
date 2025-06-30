@@ -7,59 +7,39 @@
           header="Login"
           subheader="Faça login com sua conta existente!"
           styleClass="mt-10"
-          [style]="{ width: '20rem', overflow: 'hidden' }"
+          [style]="{ width: '20rem' }"
           *ngIf="loginCard"
         >
-          <div class="flex justify-center align-middle text-center">
-            <input
-              formControlName="email"
-              pInputText
-              type="email"
-              placeholder="Email"
-            />
+          <div class="flex justify-center text-center flex-col m-3">
+            <input formControlName="email" pInputText type="email" placeholder="Email" />
+            <small
+              class="p-error !text-sm text-red-500 flex justify-start !py-1"
+              *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
+            >
+              {{getError('Email','o','email')}}
+            </small>
           </div>
-          <div class="flex justify-center align-middle text-center m-3">
-            <input
-              formControlName="password"
-              pInputText
-              type="password"
-              placeholder="Senha"
-            />
+          <div class="flex justify-center text-center flex-col m-3">
+            <input formControlName="password" pInputText type="password" placeholder="Senha" />
+            <small
+              class="p-error !text-sm text-red-500 flex justify-start !py-1"
+              *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+            >
+              {{getError('Senha','a','password')}}
+            </small>
           </div>
 
-          <small
-            class="flex justify-center align-middle text-center text-red-600"
-            *ngIf="email?.invalid && email?.touched"
-          >
-            <span *ngIf="email?.errors?.['required']"
-              >Email é obrigatório.</span
-            >
-            <span *ngIf="email!.errors?.['email']"
-              >Formato de email inválido.</span
-            >
-          </small>
-          <small
-            class="flex justify-center align-middle text-center text-red-600"
-            *ngIf="password?.invalid && password?.touched"
-          >
-            <span *ngIf="password?.errors?.['required']"
-              >Senha é obrigatória.</span
-            >
-            <span *ngIf="password?.errors?.['minlength']">
-              Mínimo de {{ password?.errors?.['minlength']?.requiredLength }}
-              caracteres.</span
-            >
-          </small>
           <div class="card flex justify-center mt-3">
-            <button type="submit" pButton pRipple [disabled]="!loginForm.valid">
-              Fazer Login
-            </button>
+            <button type="submit" pButton pRipple [disabled]="!loginForm.valid">Fazer Login</button>
           </div>
 
           <span
             class="flex justify-center align-middle text-center text-red-600 font-semibold"
             style="cursor: pointer"
             (click)="onChangeCard()"
+            (keydown.enter)="onChangeCard()"
+            (keydown.space)="onChangeCard()"
+            tabindex="0"
           >
             Criar Conta
           </span>
@@ -72,70 +52,39 @@
           header="Criar Conta"
           subheader="Crie já sua conta gratuita!"
           styleClass="mt-10"
-          [style]="{ width: '20rem', overflow: 'hidden' }"
+          [style]="{ width: '20rem' }"
           *ngIf="!loginCard"
         >
-          <div class="flex justify-center align-middle text-center">
-            <input
-              formControlName="name"
-              pInputText
-              type="text"
-              placeholder="Nome"
-            />
+          <div class="flex justify-center text-center flex-col m-3">
+            <input formControlName="name" pInputText type="text" placeholder="Nome" />
+            <small
+              class="p-error !text-sm text-red-500 flex justify-start !py-1"
+              *ngIf="signupForm.get('name')?.touched && signupForm.get('name')?.invalid"
+            >
+              {{getError('Nome','o','name')}}
+            </small>
           </div>
-          <div class="flex justify-center align-middle text-center mt-3">
-            <input
-              formControlName="email"
-              pInputText
-              type="email"
-              placeholder="Email"
-            />
+          <div class="flex justify-center text-center flex-col m-3">
+            <input formControlName="email" pInputText type="email" placeholder="Email" />
+            <small
+              class="p-error !text-sm text-red-500 flex justify-start !py-1"
+              *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid"
+            >
+              {{getError('Email','o','email')}}
+            </small>
           </div>
-          <div class="flex justify-center align-middle text-center mt-3">
-            <input
-              formControlName="password"
-              pInputText
-              type="password"
-              placeholder="Senha"
-            />
+          <div class="flex justify-center text-center flex-col m-3">
+            <input formControlName="password" pInputText type="password" placeholder="Senha" />
+            <small
+              class="p-error !text-sm text-red-500 flex justify-start !py-1"
+              *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid"
+            >
+              {{getError('Senha','a','password')}}
+            </small>
           </div>
 
-          <small
-            class="flex justify-center align-middle text-center text-red-600"
-            *ngIf="name?.invalid && name?.touched"
-          >
-            <span *ngIf="name?.errors?.['required']">Nome é obrigatório.</span>
-          </small>
-          <small
-            class="flex justify-center align-middle text-center text-red-600"
-            *ngIf="email?.invalid && email?.touched"
-          >
-            <span *ngIf="email?.errors?.['required']"
-              >Email é obrigatório.</span
-            >
-            <span *ngIf="email!.errors?.['email']"
-              >Formato de email inválido.</span
-            >
-          </small>
-          <small
-            class="flex justify-center align-middle text-center text-red-600"
-            *ngIf="password?.invalid && password?.touched"
-          >
-            <span *ngIf="password?.errors?.['required']"
-              >Senha é obrigatória.</span
-            >
-            <span *ngIf="password?.errors?.['minlength']">
-              Mínimo de {{ password?.errors?.['minlength']?.requiredLength }}
-              caracteres.</span
-            >
-          </small>
           <div class="card flex justify-center mt-3">
-            <button
-              type="submit"
-              pButton
-              pRipple
-              [disabled]="!signupForm.valid"
-            >
+            <button type="submit" pButton pRipple [disabled]="!signupForm.valid">
               Criar Conta
             </button>
           </div>
@@ -143,6 +92,9 @@
             class="flex justify-center align-middle text-center text-red-600 font-semibold"
             style="cursor: pointer"
             (click)="onChangeCard()"
+            (keydown.enter)="onChangeCard()"
+            (keydown.space)="onChangeCard()"
+            tabindex="0"
           >
             Login
           </span>
