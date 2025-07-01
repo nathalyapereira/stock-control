@@ -8,8 +8,9 @@ import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from 'src/app/core/services/user/user';
-import { SignupUserRequest } from 'src/app/models/interfaces/user/SignupUserRequest';
+import { SignupUserRequest } from 'src/models/interfaces/user/SignupUserRequest';
 import { AuthRequest } from 'src/app/core/services/auth/AuthRequest';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,7 @@ import { AuthRequest } from 'src/app/core/services/auth/AuthRequest';
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
+    // PrimeNG
     CardModule,
     InputTextModule,
     ButtonModule,
@@ -25,14 +27,14 @@ import { AuthRequest } from 'src/app/core/services/auth/AuthRequest';
   ],
   standalone: true,
   templateUrl: './home.html',
-  styleUrl: './home.scss',
-  providers: [CookieService]
+  styleUrl: './home.scss'
 })
 export class Home {
   //Injects
   private readonly formBuilder = inject(FormBuilder);
   private readonly userService = inject(User);
   private readonly cookieService = inject(CookieService);
+  private readonly messageService = inject(MessageService);
 
   //Properties
   loginCard = true;
@@ -64,18 +66,6 @@ export class Home {
     return `${fieldName} inválid${article}.`;
   }
 
-  get email() {
-    return this.loginCard ? this.loginForm.get('email') : this.signupForm.get('email');
-  }
-
-  get password() {
-    return this.loginCard ? this.loginForm.get('password') : this.signupForm.get('password');
-  }
-
-  get name() {
-    return this.signupForm.get('name');
-  }
-
   onChangeCard(): void {
     this.loginCard = !this.loginCard;
     this.clearCard();
@@ -91,10 +81,25 @@ export class Home {
       this.userService.authUser(this.loginForm.value as AuthRequest).subscribe({
         next: (response) => {
           if (response) {
-            alert('Usuário teste logado com sucesso!');
-            this.cookieService.set('USER_INFO', response?.token);
+            this.cookieService.set('USER_INFO', response?.token, 1, '/', '', false, 'Lax');
             this.loginForm.reset();
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Login realizado com sucesso',
+              detail: `Bem-vindo de Volta ${response?.name}!`,
+              life: 3000
+            });
           }
+        },
+        error: (err) => {
+          console.error(err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro ao fazer Login',
+            detail: 'Verifique suas credenciais e tente novamente.',
+            life: 3000
+          });
         }
       });
     }
@@ -105,12 +110,26 @@ export class Home {
       this.userService.signupUser(this.signupForm.value as SignupUserRequest).subscribe({
         next: (response) => {
           if (response) {
-            alert('Usuário teste criado com sucesso!');
             this.signupForm.reset();
             this.loginCard = true;
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Usuário criado com sucesso!',
+              detail: `Bem-vindo ${response?.name}!`,
+              life: 3000
+            });
           }
         },
-        error: (err) => console.log(err)
+        error: (err) => {
+          console.error(err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro ao criar usuário',
+            detail: 'Verifique os dados e tente novamente.',
+            life: 3000
+          });
+        }
       });
     }
   }

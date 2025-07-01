@@ -16,8 +16,11 @@
     "module": "preserve",
     "baseUrl": "./",
     "paths": {
-      "@models/": ["src/app/models/*"],
-      "@environments/": ["src/environments/*"]
+      "@models/": ["src/models/*"],
+      "@environments/": ["src/environments/*"],
+      "@core/*": ["src/app/core/*"],
+      "@features/*": ["src/app/features/*"],
+      "@shared/*": ["src/app/shared/*"]
     }
   },
   "angularCompilerOptions": {
