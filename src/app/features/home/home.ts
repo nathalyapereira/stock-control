@@ -11,6 +11,7 @@ import { User } from 'src/app/core/services/user/user';
 import { SignupUserRequest } from 'src/models/interfaces/user/SignupUserRequest';
 import { AuthRequest } from 'src/app/core/services/auth/AuthRequest';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ export class Home {
   private readonly userService = inject(User);
   private readonly cookieService = inject(CookieService);
   private readonly messageService = inject(MessageService);
+  private readonly router = inject(Router);
 
   //Properties
   loginCard = true;
@@ -83,6 +85,7 @@ export class Home {
           if (response) {
             this.cookieService.set('USER_INFO', response?.token, 1, '/', '', false, 'Lax');
             this.loginForm.reset();
+            this.router.navigate(['/dashboard']);
 
             this.messageService.add({
               severity: 'success',

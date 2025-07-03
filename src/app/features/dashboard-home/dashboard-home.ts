@@ -1,3 +1,4 @@
+import { ToolbarNavigation } from './../../shared/components/toolbar-navigation/toolbar-navigation';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +20,9 @@ import { ToolbarModule } from 'primeng/toolbar';
     ButtonModule,
     ToolbarModule,
     CardModule,
-    ToastModule
+    ToastModule,
+    // Components
+    ToolbarNavigation
   ],
   templateUrl: './dashboard-home.html',
   styleUrl: './dashboard-home.scss'
