@@ -12,16 +12,10 @@ export const routes: Routes = [
     path: 'home',
     component: Home
   },
-  // {
-  //   path: 'dashboard',
-  //   loadComponent: () =>
-  //     import('@shared/dashboard/dashboard-module').then((m) => m.DashboardModule),
-  //   canActivate: [AuthGuard]
-  // }
   {
     path: 'dashboard',
-    loadComponent: () =>
-      import('@features/dashboard-home/dashboard-home').then((m) => m.DashboardHome),
+    loadChildren: () =>
+      import('@shared/dashboard/dashboard.routes').then((r) => r.DASHBOARD_ROUTES),
     canActivate: [AuthGuard]
   }
 ];

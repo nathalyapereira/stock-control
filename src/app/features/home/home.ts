@@ -9,7 +9,7 @@ import { RippleModule } from 'primeng/ripple';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from 'src/app/core/services/user/user';
 import { SignupUserRequest } from 'src/models/interfaces/user/SignupUserRequest';
-import { AuthRequest } from 'src/app/core/services/auth/AuthRequest';
+import { AuthRequest } from 'src/models/interfaces/auth/AuthRequest';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 

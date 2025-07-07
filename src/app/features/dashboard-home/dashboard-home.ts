@@ -1,34 +1,48 @@
-import { ToolbarNavigation } from './../../shared/components/toolbar-navigation/toolbar-navigation';
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GetAllProductsResponse } from './../../../models/interfaces/products/response/GetAllProductsResponse';
+import { Component, inject, OnInit } from '@angular/core';
+import { Products } from '@core/services/products/products';
+import { DashboardImports } from '@shared/dashboard/dashboard-imports';
+import { ProductsDataTransfer } from '@shared/services/products/products-data-transfer';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { DrawerModule } from 'primeng/drawer';
-import { ToastModule } from 'primeng/toast';
-import { ToolbarModule } from 'primeng/toolbar';
+
 @Component({
   selector: 'app-dashboard-home',
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    CommonModule,
-    // PrimeNG
-    DrawerModule,
-    ButtonModule,
-    ToolbarModule,
-    CardModule,
-    ToastModule,
-    // Components
-    ToolbarNavigation
-  ],
+  imports: [...DashboardImports.imports],
   templateUrl: './dashboard-home.html',
-  styleUrl: './dashboard-home.scss'
+  providers: [DashboardImports.providers]
 })
-export class DashboardHome {
+export class DashboardHome implements OnInit {
   //Injects
   private readonly cookieService = inject(CookieService);
   private readonly messageService = inject(MessageService);
+  private readonly productsService = inject(Products);
+  private readonly productsDataTransfer = inject(ProductsDataTransfer);
+
+  //Properties
+  public listProducts: GetAllProductsResponse[] = [];
+
+  ngOnInit(): void {
+    this.getProductsData();
+  }
+
+  getProductsData(): void {
+    this.productsService.getProducts().subscribe({
+      next: (response) => {
+        if (response.length > 0) {
+          this.listProducts = response;
+          this.productsDataTransfer.setProductsDatas(this.listProducts);
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching products:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Erro ao buscar produtos!',
+          life: 3000
+        });
+      }
+    });
+  }
 }

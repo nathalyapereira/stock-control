@@ -4,8 +4,8 @@ import { environment } from '../../../../environments/environment';
 import { SignupUserRequest } from 'src/models/interfaces/user/SignupUserRequest';
 import { Observable } from 'rxjs';
 import { SignupUserResponse } from 'src/models/interfaces/user/SignupUserResponse';
-import { AuthRequest } from '../auth/AuthRequest';
-import { AuthResponse } from '../auth/AuthResponse';
+import { AuthRequest } from '../../../../models/interfaces/auth/AuthRequest';
+import { AuthResponse } from '../../../../models/interfaces/auth/AuthResponse';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
