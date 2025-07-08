@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -12,6 +12,7 @@ import { SignupUserRequest } from 'src/models/interfaces/user/SignupUserRequest'
 import { AuthRequest } from 'src/models/interfaces/auth/AuthRequest';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +31,7 @@ import { Router } from '@angular/router';
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class Home {
+export class Home implements OnDestroy {
   //Injects
   private readonly formBuilder = inject(FormBuilder);
   private readonly userService = inject(User);
@@ -39,6 +40,7 @@ export class Home {
   private readonly router = inject(Router);
 
   //Properties
+  private readonly destroy$ = new Subject<void>();
   loginCard = true;
 
   loginForm = this.formBuilder.group({
@@ -80,60 +82,72 @@ export class Home {
 
   onSubmitLoginForm(): void {
     if (this.loginForm.value && this.loginForm.valid) {
-      this.userService.authUser(this.loginForm.value as AuthRequest).subscribe({
-        next: (response) => {
-          if (response) {
-            this.cookieService.set('USER_INFO', response?.token, 1, '/', '', false, 'Lax');
-            this.loginForm.reset();
-            this.router.navigate(['/dashboard']);
+      this.userService
+        .authUser(this.loginForm.value as AuthRequest)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              this.cookieService.set('USER_INFO', response?.token, 1, '/', '', false, 'Lax');
+              this.loginForm.reset();
+              this.router.navigate(['/dashboard']);
 
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Login realizado com sucesso',
+                detail: `Bem-vindo de Volta ${response?.name}!`,
+                life: 3000
+              });
+            }
+          },
+          error: (err) => {
+            console.error(err);
             this.messageService.add({
-              severity: 'success',
-              summary: 'Login realizado com sucesso',
-              detail: `Bem-vindo de Volta ${response?.name}!`,
+              severity: 'error',
+              summary: 'Erro ao fazer Login',
+              detail: 'Verifique suas credenciais e tente novamente.',
               life: 3000
             });
           }
-        },
-        error: (err) => {
-          console.error(err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro ao fazer Login',
-            detail: 'Verifique suas credenciais e tente novamente.',
-            life: 3000
-          });
-        }
-      });
+        });
     }
   }
 
   onSubmitSignupForm(): void {
     if (this.signupForm.value && this.signupForm.valid) {
-      this.userService.signupUser(this.signupForm.value as SignupUserRequest).subscribe({
-        next: (response) => {
-          if (response) {
-            this.signupForm.reset();
-            this.loginCard = true;
+      this.userService
+        .signupUser(this.signupForm.value as SignupUserRequest)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              this.signupForm.reset();
+              this.loginCard = true;
 
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Usuário criado com sucesso!',
+                detail: `Bem-vindo ${response?.name}!`,
+                life: 3000
+              });
+            }
+          },
+          error: (err) => {
+            console.error(err);
             this.messageService.add({
-              severity: 'success',
-              summary: 'Usuário criado com sucesso!',
-              detail: `Bem-vindo ${response?.name}!`,
+              severity: 'error',
+              summary: 'Erro ao criar usuário',
+              detail: 'Verifique os dados e tente novamente.',
               life: 3000
             });
           }
-        },
-        error: (err) => {
-          console.error(err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro ao criar usuário',
-            detail: 'Verifique os dados e tente novamente.',
-            life: 3000
-          });
-        }
-      });
+        });
     }
+  }
+
+  //Lifecycle
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
