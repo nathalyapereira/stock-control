@@ -17,5 +17,10 @@ export const routes: Routes = [
     loadChildren: () =>
       import('@shared/dashboard/dashboard.routes').then((r) => r.DASHBOARD_ROUTES),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'products',
+    loadChildren: () => import('@shared/products/products.routes').then((r) => r.PRODUCTS_ROUTES),
+    canActivate: [AuthGuard]
   }
 ];

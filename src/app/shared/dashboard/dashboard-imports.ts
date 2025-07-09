@@ -10,12 +10,14 @@ import { ToastModule } from 'primeng/toast';
 import { ChartModule } from 'primeng/chart';
 import { SharedImports } from '@shared/shared-imports';
 import { DrawerModule } from 'primeng/drawer';
+import { RouterModule } from '@angular/router';
 
 export const DashboardImports = {
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     //PrimeNG
     SidebarModule,
     ButtonModule,

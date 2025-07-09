@@ -26,4 +26,8 @@ export class ToolbarNavigation {
     this.cookieService.delete('USER_INFO');
     this.router.navigate(['/home']);
   }
+
+  irParaProdutos() {
+    this.router.navigate(['/products']);
+  }
 }
