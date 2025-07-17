@@ -1,1 +1,165 @@
-<p>products-home works!</p>
+<app-toolbar-navigation></app-toolbar-navigation>
+<div>
+  <div class="w-full">
+    <p-card styleClass="shadow-3 n-5 text-indigo-800 !w-full">
+      <ng-template #title
+        ><div class="flex items-center justify-between gap-1">
+          Produtos em Estoque
+          <p-button
+            icon="pi pi-plus"
+            (click)="addProduct()"
+            severity="success"
+            pTooltip="Adicionar Produto"
+            rounded
+            tooltipPosition="top"
+          />
+        </div>
+      </ng-template>
+      <p-table
+        #productsTable
+        dataKey="id"
+        [value]="productsDatas"
+        selectionMode="single"
+        [(selection)]="selectedProduct"
+        [metaKeySelection]="metaKey"
+        [paginator]="true"
+        [rowHover]="true"
+        [rows]="5"
+        [tableStyle]="{ 'width': '75rem' }"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [loading]="loading"
+        [globalFilterFields]="['name', 'amount']"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} produtos"
+        showGridlines
+        stripedRows
+        [scrollable]="true"
+        scrollHeight="400px"
+        [resizableColumns]="true"
+        columnResizeMode
+      >
+        <ng-template #header>
+          <tr>
+            <th id="product-name" pSortableColumn="name" style="width: auto">
+              <div class="flex items-center gap-1">
+                Nome
+                <p-sortIcon field="name" />
+                <p-columnFilter
+                  type="text"
+                  field="name"
+                  placeholder="Digite o nome"
+                  ariaLabel="Filtro por nome"
+                  matchMode="in"
+                  display="contains"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                ></p-columnFilter>
+              </div>
+            </th>
+            <th id="product-amount" pSortableColumn="amount" style="width: auto">
+              <div class="flex items-center gap-1">
+                Quantidade
+                <p-sortIcon field="amount" />
+                <p-columnFilter
+                  type="text"
+                  field="amount"
+                  placeholder="Digite o quantidade"
+                  ariaLabel="Filtro por quantidade"
+                  matchMode="contains"
+                  display="menu"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                ></p-columnFilter>
+              </div>
+            </th>
+            <th id="product-price" pSortableColumn="price" style="width: 50%">
+              <div class="flex items-center gap-1">
+                Preço
+                <p-sortIcon field="price" />
+                <p-columnFilter
+                  type="text"
+                  field="price"
+                  placeholder="Digite o preço"
+                  ariaLabel="Filtro por preço"
+                  matchMode="contains"
+                  display="menu"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                ></p-columnFilter>
+              </div>
+            </th>
+            <th id="product-description" pSortableColumn="description" style="width: auto">
+              <div class="flex items-center gap-1">
+                Descrição
+                <p-sortIcon field="description" />
+                <p-columnFilter
+                  type="text"
+                  field="description"
+                  placeholder="Digite a descrição"
+                  ariaLabel="Filtro por descrição"
+                  matchMode="contains"
+                  display="menu"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                ></p-columnFilter>
+              </div>
+            </th>
+            <th id="product-category-name" pSortableColumn="category.name" style="width: auto">
+              <div class="flex items-center gap-1">
+                Categoria
+                <p-sortIcon field="category.name" />
+                <p-columnFilter
+                  type="text"
+                  field="category.name"
+                  placeholder="Digite a categoria"
+                  ariaLabel="Filtro por categoria"
+                  matchMode="contains"
+                  display="menu"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                ></p-columnFilter>
+              </div>
+            </th>
+            <th id="product-actions" alignFrozen="right" pFrozenColumn [frozen]="true">Ações</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-product>
+          <tr>
+            <td>{{ product?.name }}</td>
+            <td>{{ product?.amount }}</td>
+            <td>{{ product?.price | currency : "BRL"}}</td>
+            <td>{{ product?.description }}</td>
+            <td>{{ product?.category.name }}</td>
+            <td>
+              <div class="flex items-center gap-1">
+                <p-button
+                  icon="pi pi-pencil"
+                  (click)="addProduct(product)"
+                  severity="warn"
+                  pTooltip="Editar Produto"
+                  rounded
+                  class="p-button-rounded p-button-warning"
+                  tooltipPosition="top"
+                />
+                <p-button
+                  icon="pi pi-trash"
+                  (click)="addProduct(product)"
+                  severity="danger"
+                  pTooltip="Remover Produto"
+                  rounded
+                  class="p-button-rounded p-button-warning"
+                  tooltipPosition="top"
+                />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

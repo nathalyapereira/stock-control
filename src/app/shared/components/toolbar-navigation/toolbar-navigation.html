@@ -1,5 +1,5 @@
 <p-toolbar styleClass="!bg-indigo-800">
-  <div class="p-toolbar-group-start">
+  <ng-template #start>
     <p-button
       icon="pi pi-home"
       label="Dashboard"
@@ -7,9 +7,8 @@
       routerLinkActive="exact_route"
       styleClass="!bg-indigo-800 text-white border !border-white hover:!border-blue-300 hover:!bg-indigo-700"
     ></p-button>
-  </div>
-
-  <div class="p-toolbar-group-center">
+  </ng-template>
+  <ng-template #center>
     <p-button
       label="Produtos"
       icon="pi pi-cart-plus"
@@ -35,9 +34,8 @@
       routerLink="/products"
       class="mr-2"
     ></p-button>
-  </div>
-
-  <div class="p-toolbar-group-end">
+  </ng-template>
+  <ng-template #end>
     <p-button
       label="Sair"
       icon="pi pi-sign-out"
@@ -48,5 +46,5 @@
       class="mr-2"
       (onClick)="handleLogout()"
     ></p-button>
-  </div>
+  </ng-template>
 </p-toolbar>
