@@ -1,4 +1,10 @@
-<app-toolbar-navigation></app-toolbar-navigation>
+<app-toolbar-navigation (getProductsDatas)="getAPIProductsData()"></app-toolbar-navigation>
+<p-confirmdialog />
+<app-products-form
+  [(displayModal)]="displayModal"
+  [productEvent]="productEventDatas"
+  (getProductsDatas)="getAPIProductsData()"
+/>
 <div>
   <div class="w-full">
     <p-card styleClass="shadow-3 n-5 text-indigo-800 !w-full">
@@ -7,7 +13,7 @@
           Produtos em Estoque
           <p-button
             icon="pi pi-plus"
-            (click)="addProduct()"
+            (onClick)="handleProductEvent(addProductEvent)"
             severity="success"
             pTooltip="Adicionar Produto"
             rounded
@@ -18,14 +24,15 @@
       <p-table
         #productsTable
         dataKey="id"
-        [value]="productsDatas"
+        [value]="(productsDatas$ | async) ?? []"
         selectionMode="single"
         [(selection)]="selectedProduct"
         [metaKeySelection]="metaKey"
         [paginator]="true"
         [rowHover]="true"
-        [rows]="5"
-        [tableStyle]="{ 'width': '75rem' }"
+        [rows]="rows"
+        [first]="first"
+        [tableStyle]="{ 'width': '100%' }"
         [rowsPerPageOptions]="[5, 10, 20]"
         [loading]="loading"
         [globalFilterFields]="['name', 'amount']"
@@ -37,6 +44,7 @@
         scrollHeight="400px"
         [resizableColumns]="true"
         columnResizeMode
+        [totalRecords]="totalRecords"
       >
         <ng-template #header>
           <tr>
@@ -49,11 +57,11 @@
                   field="name"
                   placeholder="Digite o nome"
                   ariaLabel="Filtro por nome"
-                  matchMode="in"
-                  display="contains"
                   [showMatchModes]="false"
                   [showOperator]="false"
                   [showAddButton]="false"
+                  display="menu"
+                  filterOn="input"
                 ></p-columnFilter>
               </div>
             </th>
@@ -66,11 +74,11 @@
                   field="amount"
                   placeholder="Digite o quantidade"
                   ariaLabel="Filtro por quantidade"
-                  matchMode="contains"
-                  display="menu"
                   [showMatchModes]="false"
                   [showOperator]="false"
                   [showAddButton]="false"
+                  display="menu"
+                  filterOn="input"
                 ></p-columnFilter>
               </div>
             </th>
@@ -83,11 +91,11 @@
                   field="price"
                   placeholder="Digite o preço"
                   ariaLabel="Filtro por preço"
-                  matchMode="contains"
-                  display="menu"
                   [showMatchModes]="false"
                   [showOperator]="false"
                   [showAddButton]="false"
+                  display="menu"
+                  filterOn="input"
                 ></p-columnFilter>
               </div>
             </th>
@@ -100,11 +108,11 @@
                   field="description"
                   placeholder="Digite a descrição"
                   ariaLabel="Filtro por descrição"
-                  matchMode="contains"
-                  display="menu"
                   [showMatchModes]="false"
                   [showOperator]="false"
                   [showAddButton]="false"
+                  display="menu"
+                  filterOn="input"
                 ></p-columnFilter>
               </div>
             </th>
@@ -117,11 +125,11 @@
                   field="category.name"
                   placeholder="Digite a categoria"
                   ariaLabel="Filtro por categoria"
-                  matchMode="contains"
-                  display="menu"
                   [showMatchModes]="false"
                   [showOperator]="false"
                   [showAddButton]="false"
+                  display="menu"
+                  filterOn="input"
                 ></p-columnFilter>
               </div>
             </th>
@@ -133,13 +141,15 @@
             <td>{{ product?.name }}</td>
             <td>{{ product?.amount }}</td>
             <td>{{ product?.price | currency : "BRL"}}</td>
-            <td>{{ product?.description }}</td>
+            <td [pTooltip]="product?.description" tooltipPosition="top">
+              {{ product?.description | shorten : 25}}
+            </td>
             <td>{{ product?.category.name }}</td>
-            <td>
+            <td alignFrozen="right" pFrozenColumn [frozen]="true">
               <div class="flex items-center gap-1">
                 <p-button
                   icon="pi pi-pencil"
-                  (click)="addProduct(product)"
+                  (onClick)="handleProductEvent(editProductEvent, product)"
                   severity="warn"
                   pTooltip="Editar Produto"
                   rounded
@@ -148,7 +158,7 @@
                 />
                 <p-button
                   icon="pi pi-trash"
-                  (click)="addProduct(product)"
+                  (onClick)="handleDeleteProduct(product.id, product.name)"
                   severity="danger"
                   pTooltip="Remover Produto"
                   rounded

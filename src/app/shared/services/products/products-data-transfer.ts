@@ -12,7 +12,7 @@ export class ProductsDataTransfer {
 
   setProductsDatas(products: GetAllProductsResponse[]): void {
     if (products) {
-      this.productsDataEmitter$.next(products);
+      this.productsDataEmitter$.next([...products]);
       this.getProductsDatas();
     }
   }
@@ -26,7 +26,6 @@ export class ProductsDataTransfer {
       .subscribe((response) => {
         if (response.length > 0) {
           this.productsDatas = response;
-          console.log('Products fetched successfully:', this.productsDatas);
         }
       });
     return this.productsDatas;

@@ -1,0 +1,103 @@
+<p-dialog
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem', height: 'auto' }"
+  [draggable]="true"
+  [resizable]="true"
+  [closable]="true"
+  (onHide)="closeModal()"
+  [header]="productEventDatas.action"
+  class="product-dialog"
+  appendTo="body"
+>
+  <div *ngIf="productEventDatas.action === addProductAction">
+    <form [formGroup]="addProductForm" (ngSubmit)="handleSubmitAddProduct()">
+      <div class="card flex flex-col gap-3">
+        <input formControlName="name" pInputText placeholder="Nome" />
+        <p-select
+          formControlName="category_id"
+          [options]="(categoriesData$ | async)  ?? []"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Selecione uma categoria"
+          class="w-full"
+        />
+        <input formControlName="price" pInputText placeholder="Preço" />
+        <input formControlName="description" pInputText placeholder="Descrição" />
+        <input formControlName="amount" pInputText placeholder="Quantidade" />
+      </div>
+    </form>
+  </div>
+  <div *ngIf="productEventDatas.action === editProductAction">
+    <form [formGroup]="editProductForm" (ngSubmit)="handleSubmitEditProduct()">
+      <div class="card flex flex-col gap-3">
+        <input formControlName="name" pInputText placeholder="Nome" />
+        <div *ngIf="!loading">
+          <p-select
+            formControlName="category_id"
+            [options]="(categoriesData$ | async)  ?? []"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Selecione uma categoria"
+            class="w-full"
+          />
+        </div>
+        <input formControlName="price" pInputText placeholder="Preço" />
+        <input formControlName="description" pInputText placeholder="Descrição" />
+        <input formControlName="amount" pInputText placeholder="Quantidade" />
+      </div>
+    </form>
+  </div>
+  <div *ngIf="productEventDatas.action === saleProductAction">
+    <form [formGroup]="saleProductForm" (ngSubmit)="handleSubmitSaleProduct()">
+      <div class="card flex flex-col gap-3">
+        <div *ngIf="!loading">
+          <p-select
+            formControlName="product_id"
+            [options]="(productsDatas$ | async)  ?? []"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Selecione um produto"
+            class="w-full"
+            appendTo="body"
+          />
+        </div>
+        <input formControlName="amount" pInputText placeholder="Quantidade" />
+      </div>
+    </form>
+  </div>
+  <ng-template #footer>
+    <div class="card w-full flex flex-col">
+      <p-divider class="w-full" />
+      <div class="flex justify-center gap-2">
+        <p-button
+          *ngIf="productEventDatas.action === addProductAction"
+          label="Concluir"
+          type="submit"
+          pButton
+          severity="success"
+          (onClick)="handleSubmitAddProduct()"
+          [disabled]="!addProductForm.valid"
+        ></p-button>
+        <p-button
+          *ngIf="productEventDatas.action === editProductAction"
+          label="Concluir"
+          type="submit"
+          pButton
+          severity="success"
+          (onClick)="handleSubmitEditProduct()"
+          [disabled]="!editProductForm.valid"
+        ></p-button>
+        <p-button
+          *ngIf="productEventDatas.action === saleProductAction"
+          label="Concluir"
+          type="submit"
+          pButton
+          severity="success"
+          (onClick)="handleSubmitSaleProduct()"
+          [disabled]="!saleProductForm.valid"
+        ></p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

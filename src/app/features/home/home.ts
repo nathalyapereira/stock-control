@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -31,7 +31,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class Home implements OnDestroy {
+export class Home implements AfterViewInit, OnDestroy {
   //Injects
   private readonly formBuilder = inject(FormBuilder);
   private readonly userService = inject(User);
@@ -41,6 +41,8 @@ export class Home implements OnDestroy {
 
   //Properties
   private readonly destroy$ = new Subject<void>();
+  @ViewChild('emailInput') public emailInputRef!: ElementRef;
+  @ViewChild('passwordInput') public passwordInputRef!: ElementRef;
   loginCard = true;
 
   loginForm = this.formBuilder.group({
@@ -53,6 +55,14 @@ export class Home implements OnDestroy {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
+
+  ngAfterViewInit(): void {
+    // this.emailInputRef.nativeElement.value = 'Seu email aqui';
+    // this.passwordInputRef.nativeElement.value = 'Sua senha aqui';
+    console.log('ngAfterViewInit testes');
+    // console.log('emailInputRef:', this.emailInputRef.nativeElement);
+    // console.log('passwordInputRef:', this.passwordInputRef.nativeElement);
+  }
 
   getError(fieldName: string, article: string, controlName: string): string {
     const control = this.loginCard
@@ -100,8 +110,7 @@ export class Home implements OnDestroy {
               });
             }
           },
-          error: (err) => {
-            console.error(err);
+          error: () => {
             this.messageService.add({
               severity: 'error',
               summary: 'Erro ao fazer Login',
@@ -132,8 +141,7 @@ export class Home implements OnDestroy {
               });
             }
           },
-          error: (err) => {
-            console.error(err);
+          error: () => {
             this.messageService.add({
               severity: 'error',
               summary: 'Erro ao criar usuário',

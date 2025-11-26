@@ -5,6 +5,8 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarNavigation } from '@shared/components/toolbar-navigation/toolbar-navigation';
+import { ProductsForm } from '@features/products-form/products-form';
+import { ShortenPipe } from '@shared/pipes/shorten/shorten-pipe';
 
 export const SharedImports = [
   CommonModule,
@@ -16,5 +18,7 @@ export const SharedImports = [
   CardModule,
   ButtonModule,
   // Components
-  ToolbarNavigation
+  ToolbarNavigation,
+  ProductsForm,
+  ShortenPipe
 ];

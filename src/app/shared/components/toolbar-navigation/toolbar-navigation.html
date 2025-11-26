@@ -1,4 +1,9 @@
 <p-toolbar styleClass="!bg-indigo-800">
+  <app-products-form
+    [(displayModal)]="displayModal"
+    [productEvent]="productEventDatas"
+    (getProductsDatas)="getAPIProductsData()"
+  />
   <ng-template #start>
     <p-button
       icon="pi pi-home"
@@ -16,7 +21,6 @@
       routerLinkActive="exact_route"
       styleClass="!bg-indigo-800 text-white border !border-white hover:!border-blue-300 hover:!bg-indigo-700"
       class="mr-2"
-      (onClick)="irParaProdutos()"
     ></p-button>
     <p-button
       label="Categorias"
@@ -31,8 +35,8 @@
       icon="pi pi-credit-card"
       routerLinkActive="exact_route"
       styleClass="!bg-indigo-800 text-white border !border-white hover:!border-blue-300 hover:!bg-indigo-700"
-      routerLink="/products"
       class="mr-2"
+      (onClick)="handleSaleProduct()"
     ></p-button>
   </ng-template>
   <ng-template #end>

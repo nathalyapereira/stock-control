@@ -61,8 +61,7 @@ export class DashboardHome implements OnInit, OnDestroy {
             this.setProductsChartConfig();
           }
         },
-        error: (err) => {
-          console.error('Error fetching products:', err);
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -74,7 +73,6 @@ export class DashboardHome implements OnInit, OnDestroy {
   }
 
   setProductsChartConfig(): void {
-    console.log('Setting products chart configuration...');
     if (!isPlatformBrowser(this.platformId) && this.listProducts.length > 0) {
       this.messageService.add({
         severity: 'warn',

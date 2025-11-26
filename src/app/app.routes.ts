@@ -22,5 +22,11 @@ export const routes: Routes = [
     path: 'products',
     loadChildren: () => import('@shared/products/products.routes').then((r) => r.PRODUCTS_ROUTES),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'categories',
+    loadChildren: () =>
+      import('@shared/categories/categories.routes').then((r) => r.CATEGORIES_ROUTES),
+    canActivate: [AuthGuard]
   }
 ];

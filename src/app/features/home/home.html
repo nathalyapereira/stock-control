@@ -11,7 +11,13 @@
           *ngIf="loginCard"
         >
           <div class="flex justify-center text-center flex-col m-3">
-            <input formControlName="email" pInputText type="email" placeholder="Email" />
+            <input
+              #emailInput
+              formControlName="email"
+              pInputText
+              type="email"
+              placeholder="Email"
+            />
             <small
               class="p-error !text-sm text-red-500 flex justify-start !py-1"
               *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
@@ -20,7 +26,13 @@
             </small>
           </div>
           <div class="flex justify-center text-center flex-col m-3">
-            <input formControlName="password" pInputText type="password" placeholder="Senha" />
+            <input
+              #passwordInput
+              formControlName="password"
+              pInputText
+              type="password"
+              placeholder="Senha"
+            />
             <small
               class="p-error !text-sm text-red-500 flex justify-start !py-1"
               *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"

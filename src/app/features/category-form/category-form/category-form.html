@@ -1,0 +1,46 @@
+<p-dialog
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem', height: 'auto' }"
+  [draggable]="true"
+  [resizable]="true"
+  [closable]="true"
+  (onHide)="closeModal()"
+  [header]="categoryEventDatas.action"
+  class="category-dialog"
+  appendTo="body"
+>
+  <div>
+    <form [formGroup]="categoryForm" (ngSubmit)="handleSubmitAddCategory()">
+      <div class="card flex flex-col gap-3">
+        <input formControlName="name" pInputText placeholder="Nome" />
+      </div>
+    </form>
+  </div>
+
+  <ng-template #footer>
+    <div class="card w-full flex flex-col">
+      <p-divider class="w-full" />
+      <div class="flex justify-center gap-2">
+        <p-button
+          *ngIf="categoryEventDatas.action === addCategoryAction"
+          label="Concluir"
+          type="submit"
+          pButton
+          severity="success"
+          (onClick)="handleSubmitAddCategory()"
+          [disabled]="!categoryForm.valid"
+        ></p-button>
+        <p-button
+          *ngIf="categoryEventDatas.action === editCategoryAction"
+          label="Concluir"
+          type="submit"
+          pButton
+          severity="success"
+          (onClick)="handleSubmitEditCategory()"
+          [disabled]="!categoryForm.valid"
+        ></p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
